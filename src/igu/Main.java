@@ -271,6 +271,9 @@ public class Main extends javax.swing.JFrame {
        dnis[index] = txtDNI.getText();
        nombres[index] = txtNombre.getText();
        apellidos[index] = txtApellido.getText();
+       telefonos[index] = txtTelefono.getText();
+       direcciones[index] = txtDireccion.getText();
+       fechaNacimientos[index] = txtFNacimiento.getText();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnAvanzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAvanzarActionPerformed
