@@ -1,11 +1,11 @@
-package form_agendaelectronica;
+package MainWindow;
 import igu.Main;
 
 /**
  *
  * @author USUARIO
  */
-public class Form_AgendaElectronica {
+public class MainW {
     public static void main(String[] args) {
         Main Window = new Main();
         Window.setTitle("Form Agenda Electronica");
