@@ -17,7 +17,7 @@ public class Main extends javax.swing.JFrame {
 
     public Main() {
         initComponents();
-        String[] columns = {"Nombre", "Apellido","Edad", "DNI", "Telefono", "Direccion", "FechaNacimiento"};
+        String[] columns = {"Nombre", "Apellido","DNI", "Telefono", "Direccion", "FechaNacimiento"};
         model = new DefaultTableModel(columns, 0);
         tabla.setModel(model);
     }
@@ -252,30 +252,131 @@ public class Main extends javax.swing.JFrame {
     private void btnRetrocederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRetrocederActionPerformed
         int index = 0;
         index = Integer.parseInt(txtIndice.getText());
-        
-        if(index > 0){
-        index--;
-        String indexS = String.valueOf(index);
-        txtIndice.setText(indexS);
-        }
-        else {
+
+        if (index > 0) {
+            index--;
+            String indexS = String.valueOf(index);
+            txtIndice.setText(indexS);
+        } else {
             JOptionPane.showMessageDialog(this, "Error: Limite de retroceder de la agenda es hasta 0", "LIMITE", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
     }//GEN-LAST:event_btnRetrocederActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-       String indice = txtIndice.getText();
-       int index = Integer.parseInt(indice);
+        String indice = txtIndice.getText();
+        int index = Integer.parseInt(indice);
+        String dniS = txtDNI.getText();
+        String nombreS = txtNombre.getText();
+        String apellidoS = txtApellido.getText();
+        String telefonoS = txtTelefono.getText();
+        String direccionS = txtDireccion.getText();
+        String fechaNacimientoS = txtFNacimiento.getText();
+        
+        boolean duplicadoMismoIndex = false;
+        int indexSame = 0;
+        boolean duplicadoDiffIndex = false;
+        int indexDiff = 0;
+
+        if ((dnis[index] != null) && !(dnis[index].isEmpty())) {
+            for (int i = 0; i < dnis.length; i++) {
+                
+                // IMPORTANTE: Saltar posiciones vacías para evitar errores
+                if (dnis[i] == null || dnis[i].isEmpty()) {
+                        continue;
+                }
+                
+                if (dnis[index].equalsIgnoreCase(dnis[i])) {
+                    int error = JOptionPane.showConfirmDialog(this, "El Dni Se Esta Sobrescribiendo En El Mismo Indice, Desea Guardar Nuevos Datos En El Mismo Indice?", "Informacion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+                    if (error == JOptionPane.YES_OPTION) {
+                        duplicadoMismoIndex = true;
+                        break;
+                    } else {
+                        return;
+                    }
+
+                }
+                
+                
+            }
+        }
+        
+        for (int i = 0; i < dnis.length; i++) {
+            if (i == index || dnis[i] == null || dnis[i].isEmpty()) {
+                continue;
+            }
+
+            if (dnis[i].equalsIgnoreCase(dniS)) {
+                duplicadoDiffIndex = true;
+                indexDiff = i;
+                break;
+
+            }
+        }
+
+        if(duplicadoDiffIndex == true){
+        int next = JOptionPane.showConfirmDialog(this, "El Dni Ya Esta Duplicado en el indice["+indexDiff+"], desea guardarlo en este nuevo Indice[" + index + "]", "Info", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        if (next == JOptionPane.YES_OPTION) {
+            duplicadoDiffIndex = true;
+
+        } else {
+            return;
+        }
+        }
+
+
+        if (duplicadoMismoIndex == false || duplicadoDiffIndex == true) {
+
+            dnis[index] = dniS;
+            nombres[index] = nombreS;
+            apellidos[index] = apellidoS;
+            telefonos[index] = telefonoS;
+            direcciones[index] = direccionS;
+            fechaNacimientos[index] = fechaNacimientoS;
+
+            DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+            Object[] fila = {nombres[index], apellidos[index], dnis[index], telefonos[index], direcciones[index], fechaNacimientos[index]};
+            modelo.addRow(fila);
+
+            JOptionPane.showMessageDialog(this, "Datos Ingresados En El Indice[" + index + "]", "Info", JOptionPane.INFORMATION_MESSAGE);
+
+            clean();
+            
+        } else if (duplicadoMismoIndex == true) {
+
+            dnis[index] = dniS;
+            nombres[index] = nombreS;
+            apellidos[index] = apellidoS;
+            telefonos[index] = telefonoS;
+            direcciones[index] = direccionS;
+            fechaNacimientos[index] = fechaNacimientoS;
+            
+            DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+            if (index < modelo.getRowCount()) {
+                modelo.setValueAt( nombreS, (index), 0);
+                modelo.setValueAt(apellidoS, (index), 1);
+                modelo.setValueAt(dniS, (index), 2);
+                modelo.setValueAt(telefonoS, (index), 3);
+                modelo.setValueAt(direccionS, (index), 4);
+                modelo.setValueAt(fechaNacimientoS, (index), 5);
+
+            }
+            JOptionPane.showMessageDialog(this, "Datos Modificados Indice[" + index + "]");
+            clean();
+
+        }
        
-       dnis[index] = txtDNI.getText();
-       nombres[index] = txtNombre.getText();
-       apellidos[index] = txtApellido.getText();
-       telefonos[index] = txtTelefono.getText();
-       direcciones[index] = txtDireccion.getText();
-       fechaNacimientos[index] = txtFNacimiento.getText();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
+    private void clean(){
+        txtDNI.setText("");
+        txtNombre.setText("");
+        txtApellido.setText("");
+        txtTelefono.setText("");
+        txtFNacimiento.setText("");
+        txtDireccion.setText("");
+    }
     private void btnAvanzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAvanzarActionPerformed
         int index = 0;
         index = Integer.parseInt(txtIndice.getText());
